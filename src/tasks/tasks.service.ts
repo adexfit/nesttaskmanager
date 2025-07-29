@@ -12,12 +12,12 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 @Injectable()
 export class TasksService {
   constructor(
-    @InjectRepository(Task) private readonly taskRepo: Repository<Task>,
+    @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
   ) {}
 
   async findAll(): Promise<Task[]> {
     try {
-      return await this.taskRepo.find();
+      return await this.taskRepository.find();
     } catch (error) {
       throw new InternalServerErrorException('Failed to fetch tasks');
     }
@@ -25,7 +25,7 @@ export class TasksService {
 
   async findOne(id: number): Promise<Task> {
     try {
-      const task = await this.taskRepo.findOneBy({ id });
+      const task = await this.taskRepository.findOneBy({ id });
       if (!task) throw new NotFoundException(`Task with ID ${id} not found`);
       return task;
     } catch (error) {
@@ -36,8 +36,8 @@ export class TasksService {
 
   async create(dto: CreateTaskDto): Promise<Task> {
     try {
-      const task = this.taskRepo.create(dto);
-      return await this.taskRepo.save(task);
+      const task = this.taskRepository.create(dto);
+      return await this.taskRepository.save(task);
     } catch (error) {
       throw new InternalServerErrorException('Failed to create task');
     }
@@ -48,18 +48,17 @@ export class TasksService {
     if (!task) throw new NotFoundException('Task not found');
     try {
       Object.assign(task, dto);
-      return await this.taskRepo.save(task);
+      return await this.taskRepository.save(task);
     } catch (error) {
       throw new InternalServerErrorException('Failed to update task');
     }
   }
 
-
   async remove(id: number): Promise<void> {
     const task = await this.findOne(id);
     if (!task) throw new NotFoundException('Task not found');
     try {
-      await this.taskRepo.remove(task);
+      await this.taskRepository.remove(task);
     } catch (error) {
       throw new InternalServerErrorException('Failed to delete task');
     }

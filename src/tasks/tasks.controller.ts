@@ -17,26 +17,23 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Get()
-  async findAll() {
-    return await this.tasksService.findAll();
+  findAll() {
+    return this.tasksService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.tasksService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.tasksService.findOne(id);
   }
 
   @Post()
-  async create(@Body() dto: CreateTaskDto) {
-    return await this.tasksService.create(dto);
+  create(@Body() dto: CreateTaskDto) {
+    return this.tasksService.create(dto);
   }
 
   @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateTaskDto,
-  ) {
-    return await this.tasksService.update(id, dto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTaskDto) {
+    return this.tasksService.update(id, dto);
   }
 
   @Delete(':id')
